@@ -1,62 +1,90 @@
-# Calendo IO | Event Manager App
+# Codeflux Labs Template
 
-This project is a mobile application designed to manage and organize events, with the main objective of exercising the integration of technologies like **RealmDB** and **Formik**, along with creating a user-friendly interface.
-
-![Screenshot](assets/calendo-io-cover.png)
+Welcome to the **Codeflux Labs Template**! This template is designed to kickstart your Expo application development using React Native, integrating essential libraries like RealmDB, Styled Components, Formik, and React Navigation.
 
 ## Features
 
--   **RealmDB**: Used to handle local data storage, providing efficient, real-time database management for events.
--   **Formik**: Simplifies form handling with built-in validation using **Yup**.
--   **Date and Time Pickers**: Enables users to select and validate event dates and times.
--   **Category Selection**: Users can select categories using a chip UI component.
--   **Reminder Toggle**: Option to set a reminder for the event.
+-   **RealmDB**: A mobile database that enables you to store data locally and perform queries easily.
+-   **Styled Components**: Write CSS-in-JS to style your components, providing a modular approach to styling.
+-   **Formik**: A powerful library for managing form state and validation.
+-   **React Navigation**: Easy navigation between different screens in your app.
+-   **Expo**: A framework for building React Native applications with a set of tools and services.
 
-## Technology Stack
+## Getting Started
 
--   **React Native**: Main framework for building the mobile app.
--   **RealmDB**: Database solution for managing event data offline.
--   **Formik & Yup**: For handling forms and validation.
--   **react-native-switch**: Custom switches for user interaction.
--   **react-native-material-chips**: Chip-based UI for category selection.
--   **react-native-datetimepicker**: Integrated date and time pickers.
+### Prerequisites
 
-## Project Purpose
+-   Node.js installed on your machine.
+-   Expo CLI installed globally. You can install it using the following command:
 
-The primary goal of this project is to exercise the following:
+```bash
+npm install -g expo-cli
+```
 
--   Implementing **RealmDB** for local database handling.
--   Using **Formik** to manage form state and validation.
--   Creating UI components for event management (date, time pickers, category selection).
--   Improving familiarity with React Native UI best practices.
+### Clone the Template
 
-## Setup and Running
+To create a new project using this template, run the following command:
 
-1. Clone the repository:
+```bash
+npx create-expo-app --template codeflux-labs-template
+```
 
-    ```bash
-    https://github.com/CodeFlux-Labs/calendo-io.git
-    cd calendo-io
+### Running the App
 
-    ```
+1. Navigate to your project directory:
 
-2. Install dependencies:
+```bash
+cd your-project-name
+```
 
-    ```bash
-    yarn
+2. Start the development server:
 
-    ```
+```bash
+yarn start
+```
 
-3. To run on a device:
-    ```bash
-    yarn android
-    ```
+3. Follow the instructions in the terminal to run the app on an emulator or your physical device.
 
-## Example Usage
+## Project Structure
 
--   On the home screen, users can add or update events, select a category, set reminders, and manage start/end times for each event.
--   All data is stored locally in RealmDB, allowing offline-first behavior.
+```
+/your-repo-name
+│
+├── /src
+│   ├── /assets          # Assets like images and fonts
+│   ├── /components      # Reusable components
+│   ├── /context         # Global context
+│   ├── /hooks           # Global hooks
+│   └── /realmDB         # RealmDB setup
+│   ├── /screens         # Application screens
+│   ├── /styles-global   # Global Styled components
+│   └── /utils           # Utility functions and constants
+│
+├── App.tsx              # Main application file
+├── app.json             # Expo configuration file
+└── package.json         # NPM package file
+```
 
-## Credits
+## Developer Instructions
 
-[FigmaUI]https://www.figma.com/design/D9ZY72w7xse9nO7DVcIAm5/Calendar-mobile-app-(Community)?node-id=1-27&node-type=frame&t=FVfrHU2caB2zeTwe-0
+To customize and develop your application further, follow these steps:
+
+1. **Install Dependencies**: Run the following command to install necessary dependencies:
+
+```bash
+npm install
+```
+
+2. **Modify the Code**: Start modifying the source code in the `src` directory to fit your application's needs.
+
+3. **Use RealmDB**: For database operations, navigate to the `src/realmDB` folder where you can manage your RealmDB configurations.
+
+4. **Styling**: Customize the styles using Styled Components found in the `src/styles` directory.
+
+## License
+
+This template is open-source and available under the [MIT License](LICENSE).
+
+## Contributing
+
+Contributions are welcome! Feel free to submit a pull request or create an issue to discuss potential improvements.

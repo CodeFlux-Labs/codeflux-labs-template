@@ -1,0 +1,33 @@
+name: Publish to NPM
+
+on:
+    push:
+        branches:
+            - main # Automatically runs when you push to the main branch
+    workflow_dispatch: # Allows you to trigger it manually if needed
+
+jobs:
+    publish:
+        runs-on: ubuntu-latest
+
+        steps:
+            # Checkout the code
+            - name: Checkout code
+              uses: actions/checkout@v3
+
+            # Set up Node.js environment
+            - name: Set up Node.js
+              uses: actions/setup-node@v3
+              with:
+                  node-version: "16"
+                  registry-url: "https://registry.npmjs.org/"
+
+            # Install dependencies
+            - name: Install dependencies
+              run: npm install
+
+            # Publish the package to npm
+            - name: Publish to npm
+              run: npm publish
+              env:
+                  NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
