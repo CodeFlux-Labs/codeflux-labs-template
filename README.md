@@ -1,6 +1,8 @@
-# Event Manager App
+# Calendo IO | Event Manager App
 
 This project is a mobile application designed to manage and organize events, with the main objective of exercising the integration of technologies like **RealmDB** and **Formik**, along with creating a user-friendly interface.
+
+![Screenshot](assets/calendo-io-cover.png)
 
 ## Features
 
@@ -33,8 +35,8 @@ The primary goal of this project is to exercise the following:
 1. Clone the repository:
 
     ```bash
-    git clone https://github.com/yourusername/event-manager-app.git
-    cd event-manager-app
+    https://github.com/CodeFlux-Labs/calendo-io.git
+    cd calendo-io
 
     ```
 
