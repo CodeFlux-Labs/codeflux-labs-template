@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { Text, StyleSheet, GestureResponderEvent, ScrollView, View } from "react-native";
 import { Switch } from "react-native-switch";
 import { Formik } from "formik";
@@ -33,20 +33,11 @@ const EventSchema = Yup.object().shape({
     startTime: Yup.string()
         .required("Start time is required")
         .matches(/^\d{2}:\d{2}$/, "Time must be in 00:00 format"),
-    endTime: Yup.string().when("startTime", (startTime, schema) => {
-        return startTime
-            ? schema.test(
-                  "is-greater",
-                  "End time must be later than start time",
-                  function (endTime) {
-                      if (startTime && endTime) {
-                          return endTime > startTime;
-                      }
-                      return true;
-                  },
-              )
-            : schema.notRequired();
-    }),
+    endTime: Yup.string().when("startTime", (startTime, schema) =>
+        schema.test("is-greater", "End time must be later than start time", function (endTime) {
+            return moment(endTime, "HH:mm").isAfter(moment(startTime, "HH:mm"));
+        }),
+    ),
     remindsMe: Yup.boolean(),
     category: Yup.object()
         .shape({
@@ -96,7 +87,6 @@ const EventForm: React.FC<EventFormProps> = ({ onFinish, selectedEvent, daySelec
                 validationSchema={EventSchema}
                 onSubmit={async event => {
                     try {
-                        await EventSchema.validate(event);
                         console.log("Form submitted successfully with values: ", event);
 
                         if (event.id) {
@@ -172,6 +162,39 @@ const EventForm: React.FC<EventFormProps> = ({ onFinish, selectedEvent, daySelec
                         setCategorySelected(selected);
                         setFieldValue("category", selected);
                     };
+
+                    const renderChips = useMemo(
+                        () =>
+                            categories.map(category => (
+                                <Chip
+                                    onPress={() => onHandleChipSelected(category)}
+                                    key={category.value}
+                                    label={category.label}
+                                    style={[
+                                        {
+                                            backgroundColor: `${category.color}20`,
+                                            padding: 14,
+                                        },
+                                        category.value === categorySelected.value && {
+                                            borderWidth: 1,
+                                            borderColor: category.color,
+                                        },
+                                    ]}
+                                    labelStyle={{
+                                        fontFamily: "SFUIText-Medium",
+                                        color: colors.secondary,
+                                    }}
+                                    leadingIcon={() => (
+                                        <IconMarkEvent
+                                            width="14"
+                                            height="14"
+                                            fill={category.color}
+                                        />
+                                    )}
+                                />
+                            )),
+                        [categories, categorySelected],
+                    );
 
                     return (
                         <ScrollView style={styles.formContainer}>
@@ -317,36 +340,7 @@ const EventForm: React.FC<EventFormProps> = ({ onFinish, selectedEvent, daySelec
                             <SectionTitle>Select Category</SectionTitle>
 
                             <Row marginBottom="20px" style={{ justifyContent: "space-between" }}>
-                                {categories.map(category => {
-                                    return (
-                                        <Chip
-                                            onPress={() => onHandleChipSelected(category)}
-                                            labelStyle={{
-                                                fontFamily: "SFUIText-Medium",
-                                                color: colors.secondary,
-                                            }}
-                                            style={[
-                                                {
-                                                    backgroundColor: `${category.color}20`,
-                                                    padding: 14,
-                                                },
-                                                category.value === categorySelected.value && {
-                                                    borderWidth: 1,
-                                                    borderColor: category.color,
-                                                },
-                                            ]}
-                                            key={category.value}
-                                            label={category.label}
-                                            leadingIcon={() => (
-                                                <IconMarkEvent
-                                                    width="14"
-                                                    height="14"
-                                                    fill={category.color}
-                                                />
-                                            )}
-                                        />
-                                    );
-                                })}
+                                {renderChips}
                             </Row>
 
                             <DefaultButton

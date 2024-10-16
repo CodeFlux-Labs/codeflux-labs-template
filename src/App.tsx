@@ -53,10 +53,7 @@ export default function App() {
         <GestureHandlerRootView style={{ flex: 1 }}>
             <NavigationContainer>
                 <Stack.Navigator initialRouteName={isFirstTime ? "Onboarding" : "Calendars"}>
-                    <Stack.Screen
-                        name="Onboarding"
-                        // component={Onboarding}
-                        options={{ headerShown: false }}>
+                    <Stack.Screen name="Onboarding" options={{ headerShown: false }}>
                         {props => <Onboarding {...props} />}
                     </Stack.Screen>
                     <Stack.Screen
