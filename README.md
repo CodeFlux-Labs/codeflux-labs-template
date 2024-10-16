@@ -56,3 +56,7 @@ The primary goal of this project is to exercise the following:
 
 -   On the home screen, users can add or update events, select a category, set reminders, and manage start/end times for each event.
 -   All data is stored locally in RealmDB, allowing offline-first behavior.
+
+## Credits
+
+[FigmaUI]https://www.figma.com/design/D9ZY72w7xse9nO7DVcIAm5/Calendar-mobile-app-(Community)?node-id=1-27&node-type=frame&t=FVfrHU2caB2zeTwe-0
