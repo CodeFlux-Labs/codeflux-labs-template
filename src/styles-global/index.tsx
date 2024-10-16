@@ -111,3 +111,24 @@ export const TextError = styled(Text)<TextErrorProps>`
     font-size: 14px;
     color: red;
 `;
+
+export const Container = styled.View`
+    flex: 1;
+    justify-content: center;
+    align-items: center;
+    background-color: #f0f0f0;
+`;
+
+export const Title = styled.Text`
+    font-family: "SFUIText-Semibold";
+    font-size: 18px;
+    color: ${colors.secondary};
+    margin-top: 5px;
+`;
+
+export const Subtitle = styled.Text`
+    font-family: "SFUIText-Regular";
+    font-size: 14px;
+    color: ${colors.blueGray};
+    margin-top: 5px;
+`;

@@ -1,5 +1,5 @@
 {
-  "name": "calendonew",
+  "name": "codeflux-labs-template",
   "version": "1.0.0",
   "main": "index.tsx",
   "scripts": {
@@ -62,5 +62,10 @@
     "react-test-renderer": "18.2.0",
     "typescript": "~5.3.3"
   },
-  "private": true
+  "private": true,
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/CodeFlux-Labs/codeflux-labs-template.git"
+  }
 }
