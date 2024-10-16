@@ -1,32 +1,22 @@
 import styled from "styled-components/native";
 import { TouchableOpacity, Text } from "react-native";
 import { colors } from "@/src/assets/colors";
+import { DefaultProps } from "@/src/styles-global";
 
-interface DefaultBtnProps {
-    paddingTop?: string;
-    paddingRight?: string;
-    paddingBottom?: string;
-    paddingLeft?: string;
-    marginTop?: string;
-    marginRight?: string;
-    marginBottom?: string;
-    marginLeft?: string;
+interface DefaultBtnProps extends DefaultProps {
     height?: string;
     color?: string;
 }
 
 export const DefaultBtn = styled(TouchableOpacity)<DefaultBtnProps>`
-    padding-top: ${props => props.paddingTop || "0px"};
-    padding-right: ${props => props.paddingRight || "0px"};
-    padding-bottom: ${props => props.paddingBottom || "0px"};
-    padding-left: ${props => props.paddingLeft || "0px"};
-    margin-top: ${props => props.marginTop || "0px"};
-    margin-right: ${props => props.marginRight || "0px"};
-    margin-bottom: ${props => props.marginBottom || "12px"};
-    margin-left: ${props => props.marginLeft || "0px"};
+    padding: ${({ padding = "10px" }) => padding};
+    padding-vertical: ${({ paddingVertical = "0" }) => paddingVertical};
+    padding-horizontal: ${({ paddingHorizontal = "0" }) => paddingHorizontal};
+    margin: ${({ margin = "0" }) => margin};
+    margin-vertical: ${({ marginVertical = "0" }) => marginVertical};
+    margin-horizontal: ${({ marginHorizontal = "0" }) => marginHorizontal};
     height: ${props => props.height || "50px"};
     border-radius: 10px;
-    padding: 10px;
     background-color: ${props => props.color || colors.purple};
     alignt-items: center;
     justify-content: center;

@@ -6,7 +6,7 @@ import { ActivityIndicator } from "react-native";
 import { useFonts } from "expo-font";
 import { ModalPortal } from "react-native-modals";
 import Onboarding from "@screens/Onboarding";
-import Calendars from "@screens/Calendars";
+import Home from "@/src/screens/Home";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ONBOARDING_COMPLETE } from "./utils/storage-consts";
 
@@ -31,6 +31,7 @@ export default function App() {
                 const hasSeenOnboarding = await AsyncStorage.getItem(ONBOARDING_COMPLETE);
 
                 setIsFirstTime(hasSeenOnboarding === null);
+                console.log("hasSeenOnboarding: ", hasSeenOnboarding);
             } catch (error) {
                 console.error("Error reading onboarding status: ", error);
             }
@@ -52,13 +53,13 @@ export default function App() {
     return (
         <GestureHandlerRootView style={{ flex: 1 }}>
             <NavigationContainer>
-                <Stack.Navigator initialRouteName={isFirstTime ? "Onboarding" : "Calendars"}>
+                <Stack.Navigator initialRouteName={isFirstTime ? "Onboarding" : "Home"}>
                     <Stack.Screen name="Onboarding" options={{ headerShown: false }}>
                         {props => <Onboarding {...props} />}
                     </Stack.Screen>
                     <Stack.Screen
-                        name="Calendars"
-                        component={Calendars}
+                        name="Home"
+                        component={Home}
                         options={{ headerShown: false }}
                     />
                 </Stack.Navigator>

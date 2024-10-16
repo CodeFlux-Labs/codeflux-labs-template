@@ -3,16 +3,16 @@ import DefaultButton from "@/src/components/buttons/DefaultButton";
 import { Container, Subtitle, Title } from "@/src/styles-global";
 import { StackNavigationProp } from "@react-navigation/stack";
 
-type OnboardingProps = {
+type HomeProps = {
     navigation: StackNavigationProp<any>;
 };
 
-const Onboarding: React.FC<OnboardingProps> = ({ navigation }) => {
+const Onboarding: React.FC<HomeProps> = ({ navigation }) => {
     return (
         <Container>
             <Title centered>Welcome to the Codeflux Labs template</Title>
             <Subtitle>Onboarding</Subtitle>
-            <DefaultButton label="Go To Home Screen" onPress={() => navigation.navigate("Home")} style={{marginTop: 20}} />
+            <DefaultButton label="Go To Onboarding Screen" onPress={() => navigation.navigate("Onboarding")} style={{marginTop: 20}} />
         </Container>
     );
 };

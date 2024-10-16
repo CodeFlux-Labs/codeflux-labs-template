@@ -2,30 +2,29 @@ import styled from "styled-components/native";
 import { View, TextInput, Text } from "react-native";
 import { colors } from "../assets/colors";
 
-interface RowProps {
-    paddingTop?: string;
-    paddingRight?: string;
-    paddingBottom?: string;
-    paddingLeft?: string;
-    marginTop?: string;
-    marginRight?: string;
-    marginBottom?: string;
-    marginLeft?: string;
+export interface DefaultProps {
+    padding?: string;
+    paddingVertical?: string;
+    paddingHorizontal?: string;
+    margin?: string;
+    marginVertical?: string;
+    marginHorizontal?: string;
+}
+
+interface RowProps extends DefaultProps {
     gap?: string;
 }
 
 export const Row = styled(View)<RowProps>`
     flex-direction: row;
     align-items: center;
-    padding-top: ${props => props.paddingTop || "0px"};
-    padding-right: ${props => props.paddingRight || "0px"};
-    padding-bottom: ${props => props.paddingBottom || "0px"};
-    padding-left: ${props => props.paddingLeft || "0px"};
-    margin-top: ${props => props.marginTop || "0px"};
-    margin-right: ${props => props.marginRight || "0px"};
-    margin-bottom: ${props => props.marginBottom || "0px"};
-    margin-left: ${props => props.marginLeft || "0px"};
-    gap: ${props => props.gap || "0px"};
+    padding: ${({ padding = "0" }) => padding};
+    padding-vertical: ${({ paddingVertical = "0" }) => paddingVertical};
+    padding-horizontal: ${({ paddingHorizontal = "0" }) => paddingHorizontal};
+    margin: ${({ margin = "0" }) => margin};
+    margin-vertical: ${({ marginVertical = "0" }) => marginVertical};
+    margin-horizontal: ${({ marginHorizontal = "0" }) => marginHorizontal};
+    gap: ${({ gap = "0" }) => gap};
 `;
 
 export const RootView = styled(View)`
@@ -33,100 +32,59 @@ export const RootView = styled(View)`
     padding: 20px 10px 15px 10px;
 `;
 
-interface TextInputProps {
-    paddingTop?: string;
-    paddingRight?: string;
-    paddingBottom?: string;
-    paddingLeft?: string;
-    marginTop?: string;
-    marginRight?: string;
-    marginBottom?: string;
-    marginLeft?: string;
+interface TextInputProps extends DefaultProps {
     height?: string;
 }
 
 export const DefaultTextInput = styled(TextInput)<TextInputProps>`
-    padding-top: ${props => props.paddingTop || "5px"};
-    padding-right: ${props => props.paddingRight || "5px"};
-    padding-bottom: ${props => props.paddingBottom || "5px"};
-    padding-left: ${props => props.paddingLeft || "14px"};
-    margin-top: ${props => props.marginTop || "0px"};
-    margin-right: ${props => props.marginRight || "0px"};
-    margin-bottom: ${props => props.marginBottom || "12px"};
-    margin-left: ${props => props.marginLeft || "0px"};
+    padding: ${({ padding = "5px" }) => padding};
+    padding-left: 14px;
+    margin: ${({ margin = "0 0 12px 0" }) => margin};
     border-width: 1px;
     border-color: ${colors.lightGrayishBlue};
     border-radius: 10px;
-    height: ${props => props.height || "50px"};
+    height: ${({ height = "50px" }) => height};
 `;
 
-interface SectionTitleProps {
-    paddingTop?: string;
-    paddingRight?: string;
-    paddingBottom?: string;
-    paddingLeft?: string;
-    marginTop?: string;
-    marginRight?: string;
-    marginBottom?: string;
-    marginLeft?: string;
-    height?: string;
-}
+interface SectionTitleProps extends DefaultProps {}
 
 export const SectionTitle = styled(Text)<SectionTitleProps>`
-    padding-top: ${props => props.paddingTop || "0px"};
-    padding-right: ${props => props.paddingRight || "0px"};
-    padding-bottom: ${props => props.paddingBottom || "0px"};
-    padding-left: ${props => props.paddingLeft || "0px"};
-    margin-top: ${props => props.marginTop || "0px"};
-    margin-right: ${props => props.marginRight || "0px"};
-    margin-bottom: ${props => props.marginBottom || "12px"};
-    margin-left: ${props => props.marginLeft || "0px"};
+    margin: ${({ margin = "0 0 12px 0" }) => margin};
     font-family: "SFUIText-Medium";
     font-size: 16px;
     color: ${colors.secondary};
 `;
 
-interface TextErrorProps {
-    paddingTop?: string;
-    paddingRight?: string;
-    paddingBottom?: string;
-    paddingLeft?: string;
-    marginTop?: string;
-    marginRight?: string;
-    marginBottom?: string;
-    marginLeft?: string;
-    height?: string;
-}
+interface TextErrorProps extends DefaultProps {}
 
 export const TextError = styled(Text)<TextErrorProps>`
-    padding-top: ${props => props.paddingTop || "0px"};
-    padding-right: ${props => props.paddingRight || "0px"};
-    padding-bottom: ${props => props.paddingBottom || "0px"};
-    padding-left: ${props => props.paddingLeft || "0px"};
-    margin-top: ${props => props.marginTop || "0px"};
-    margin-right: ${props => props.marginRight || "10px"};
-    margin-bottom: ${props => props.marginBottom || "0px"};
-    margin-left: ${props => props.marginLeft || "0px"};
+    margin: ${({ margin = "0 10px 0 0" }) => margin};
     font-family: "SFUIText-Medium";
     font-size: 14px;
     color: red;
 `;
 
-export const Container = styled.View`
+export const Container = styled(View)`
     flex: 1;
     justify-content: center;
     align-items: center;
     background-color: #f0f0f0;
+    padding: 20px 15px;
 `;
 
-export const Title = styled.Text`
+interface TitleProps extends DefaultProps {
+    centered?: boolean;
+}
+
+export const Title = styled(Text)<TitleProps>`
     font-family: "SFUIText-Semibold";
     font-size: 18px;
     color: ${colors.secondary};
     margin-top: 5px;
+    ${({ centered }) => centered && "text-align: center;"}
 `;
 
-export const Subtitle = styled.Text`
+export const Subtitle = styled(Text)`
     font-family: "SFUIText-Regular";
     font-size: 14px;
     color: ${colors.blueGray};
