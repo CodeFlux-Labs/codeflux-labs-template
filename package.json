@@ -1,6 +1,6 @@
 {
     "name": "codeflux-labs-template",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "description": "A template for Expo projects using Realm and Formik.",
     "main": "index.tsx",
     "scripts": {
@@ -35,7 +35,6 @@
         "react-native-calendars": "^1.1307.0",
         "react-native-floating-action": "^1.22.0",
         "react-native-gesture-handler": "^2.19.0",
-        "react-native-material-chips": "^1.0.2",
         "react-native-modalize": "^2.1.1",
         "react-native-modals": "^0.22.3",
         "react-native-reanimated": "~3.10.1",
