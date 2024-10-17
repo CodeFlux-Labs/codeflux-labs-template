@@ -1,3 +1,3 @@
-const { expo } = require("../../app.json")
+const { expo, slug } = require("../../app.json");
 
-export const ONBOARDING_COMPLETE = `${expo.slug}-hasSeenOnboarding`;
+export const ONBOARDING_COMPLETE = `${slug || expo.slug}-hasSeenOnboarding`;

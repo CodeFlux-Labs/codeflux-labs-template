@@ -19,11 +19,15 @@ export const Row = styled(View)<RowProps>`
     flex-direction: row;
     align-items: center;
     padding: ${({ padding = "0" }) => padding};
-    padding-vertical: ${({ paddingVertical = "0" }) => paddingVertical};
-    padding-horizontal: ${({ paddingHorizontal = "0" }) => paddingHorizontal};
+    padding-top: ${({ paddingVertical = "0" }) => paddingVertical};
+    padding-bottom: ${({ paddingVertical = "0" }) => paddingVertical};
+    padding-left: ${({ paddingHorizontal = "0" }) => paddingHorizontal};
+    padding-right: ${({ paddingHorizontal = "0" }) => paddingHorizontal};
     margin: ${({ margin = "0" }) => margin};
-    margin-vertical: ${({ marginVertical = "0" }) => marginVertical};
-    margin-horizontal: ${({ marginHorizontal = "0" }) => marginHorizontal};
+    margin-top: ${({ marginVertical }) => marginVertical || "0px"};
+    margin-bottom: ${({ marginVertical }) => marginVertical || "0px"};
+    margin-left: ${({ marginHorizontal }) => marginHorizontal || "0px"};
+    margin-right: ${({ marginHorizontal }) => marginHorizontal || "0px"};
     gap: ${({ gap = "0" }) => gap};
 `;
 

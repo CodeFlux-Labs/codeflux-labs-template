@@ -1,6 +1,6 @@
 {
     "name": "codeflux-labs-template",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "description": "A template for Expo projects using Realm and Formik.",
     "main": "index.tsx",
     "scripts": {
