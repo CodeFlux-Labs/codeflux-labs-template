@@ -1,32 +1,45 @@
 {
   "expo": {
-    "name": "AppName", // Placeholder for app name
-    "slug": "app-name", // Placeholder for app slug
+    "name": "AppName",
+    "slug": "app-name",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png", // Replace with your app icon
+    "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
+    "newArchEnabled": true,
     "splash": {
-      "image": "./assets/splash.png", // Replace with your splash screen image
+      "image": "./assets/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.yourdomain.appname"
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png", // Replace with your Android adaptive icon
+        "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.yourdomain.appname" // Placeholder for app package name
+      "package": "com.yourdomain.appname"
     },
     "web": {
-      "favicon": "./assets/favicon.png" // Replace with your web favicon
+      "favicon": "./assets/favicon.png"
     },
     "assetBundlePatterns": [
       "**/*",
       "assets/fonts/*"
-    ]
+    ],
+    "experiments": {
+      "baseUrl": "/src"
+    },
+    "plugins": [
+      "expo-font"
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "5cb52942-e43e-4f76-984e-24b0dba02ed2"
+      }
+    }
   }
 }

@@ -20,6 +20,7 @@ export const DefaultBtn = styled(TouchableOpacity)<DefaultBtnProps>`
     background-color: ${props => props.color || colors.purple};
     alignt-items: center;
     justify-content: center;
+    width: 340px;
 `;
 
 export const DefaultTextBtn = styled(Text)`

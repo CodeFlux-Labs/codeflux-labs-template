@@ -45,9 +45,11 @@ export const DefaultTextInput = styled(TextInput)<TextInputProps>`
     padding-left: 14px;
     margin: ${({ margin = "0 0 12px 0" }) => margin};
     border-width: 1px;
-    border-color: ${colors.lightGrayishBlue};
+    border-color: ${colors.primaryLight};
     border-radius: 10px;
     height: ${({ height = "50px" }) => height};
+    width: 100%;
+    flex-shrink: 0;
 `;
 
 interface SectionTitleProps extends DefaultProps {}
@@ -78,6 +80,7 @@ export const Container = styled(View)`
 
 interface TitleProps extends DefaultProps {
     centered?: boolean;
+    color?: string;
 }
 
 export const Title = styled(Text)<TitleProps>`
@@ -88,9 +91,42 @@ export const Title = styled(Text)<TitleProps>`
     ${({ centered }) => centered && "text-align: center;"}
 `;
 
-export const Subtitle = styled(Text)`
+export const Subtitle = styled(Text)<DefaultProps>`
     font-family: "SFUIText-Regular";
     font-size: 14px;
     color: ${colors.blueGray};
-    margin-top: 5px;
+    margin: ${({ margin = "0" }) => margin};
+    margin-top: ${({ marginVertical }) => marginVertical || "5px"};
+    margin-bottom: ${({ marginVertical }) => marginVertical || "15px"};
+    margin-left: ${({ marginHorizontal }) => marginHorizontal || "0px"};
+    margin-right: ${({ marginHorizontal }) => marginHorizontal || "0px"};
+`;
+
+export const DefaultText = styled(Text)<TitleProps>`
+    font-family: "SFUIText-Medium";
+    font-size: 16px;
+    color: ${props => props.color || colors.blueGray};
+    ${({ centered }) => centered && "text-align: center;"}
+`;
+
+interface HrProps extends DefaultProps {
+    noFlex?: boolean;
+    color?: string;
+}
+
+export const Hr = styled.View<HrProps>`
+    ${props => (props.noFlex ? "" : "flex: 1;")}
+    border-bottom-width: 1px;
+    border-bottom-color: ${props => props.color || colors.darkGray};
+    margin: ${({ margin = "0" }) => margin};
+    margin-top: ${({ marginVertical }) => marginVertical || "0px"};
+    margin-bottom: ${({ marginVertical }) => marginVertical || "0px"};
+    margin-left: ${({ marginHorizontal }) => marginHorizontal || "0px"};
+    margin-right: ${({ marginHorizontal }) => marginHorizontal || "0px"};
+`;
+
+export const Label = styled(Text)`
+    font-family: "SFUIText-Regular";
+    font-size: 12px;
+    color: ${colors.blueGray};
 `;

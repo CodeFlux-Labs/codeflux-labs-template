@@ -1,0 +1,9 @@
+import { PRD_MOBILE_SERVER, PRD_WEB_SERVER, HOST_NAME } from "@env";
+
+export const env = {
+    NAME: "PRD",
+    PROTOCOL: "https",
+    HOST_NAME: HOST_NAME,
+    PORT_WEB_SERVER: PRD_WEB_SERVER,
+    PORT_MOBILE_SERVER: PRD_MOBILE_SERVER,
+};
