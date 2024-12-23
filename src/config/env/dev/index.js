@@ -1,9 +1,0 @@
-import { DEV_MOBILE_SERVER, DEV_WEB_SERVER, HOST_NAME } from "@env";
-
-export const env = {
-    NAME: "DEV",
-    PROTOCOL: "https",
-    HOST_NAME: HOST_NAME,
-    PORT_WEB_SERVER: DEV_WEB_SERVER,
-    PORT_MOBILE_SERVER: DEV_MOBILE_SERVER,
-};
