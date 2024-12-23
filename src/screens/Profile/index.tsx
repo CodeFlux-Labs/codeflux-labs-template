@@ -1,13 +1,12 @@
 import React, { useState } from "react";
-import { Container, DefaultText, Hr, Row, Subtitle, Title } from "@/src/styles-global";
+import { ContainerFlexStart, DefaultText, Hr, Row, Subtitle, Title } from "@/src/styles-global";
 import { StackNavigationProp } from "@react-navigation/stack";
-// import { getAuth } from "firebase/auth";
 import { ProfilePicture, SettingItem } from "./styles";
 import ProfilePhoto from "@/src/assets/images/profile-photo.png";
 import { colors } from "@/src/assets/colors";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Switch } from "react-native-switch";
-// import { handleSignOut } from "@/src/services/firebaseAuth/auth";
+import { useGetUserQuery } from "@/src/api/hooks/useUserQuery";
 
 type ProfileProps = {
     navigation: StackNavigationProp<any>;
@@ -25,6 +24,7 @@ const Profile: React.FC<ProfileProps> = ({ navigation }) => {
     const [notificationEnabled, setNotificationEnabled] = useState(false);
     // const { photoURL, displayName } = user.currentUser;
     const displayName = "Test";
+    const { data, isError, error } = useGetUserQuery();
 
     const renderSwitch = (settter, currentValue) => {
         return (
@@ -100,18 +100,17 @@ const Profile: React.FC<ProfileProps> = ({ navigation }) => {
     };
 
     return (
-        <Container>
+        <ContainerFlexStart>
             <Row gap="15px">
-                {/* {photoURL && <ProfilePicture src={photoURL} resizeMode="cover" />} */}
-                <ProfilePicture src={ProfilePhoto} resizeMode="cover" />
+                <ProfilePicture source={ProfilePhoto} resizeMode="cover" />
 
-                <Title color="#000">{displayName}</Title>
+                <Title color="#000">{data?.firstName}</Title>
             </Row>
             <Hr noFlex color={colors.primaryLight} marginVertical="20px" />
             <Subtitle marginBottom="10px">Account Settings</Subtitle>
 
             {settings.map(settingItem => renderSettingItem(settingItem))}
-        </Container>
+        </ContainerFlexStart>
     );
 };
 

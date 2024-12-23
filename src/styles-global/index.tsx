@@ -78,6 +78,12 @@ export const Container = styled(View)`
     padding: 20px 15px;
 `;
 
+export const ContainerFlexStart = styled(View)`
+    flex: 1;
+    background-color: #f0f0f0;
+    padding: 40px 15px 20px 15px;
+`;
+
 interface TitleProps extends DefaultProps {
     centered?: boolean;
     color?: string;

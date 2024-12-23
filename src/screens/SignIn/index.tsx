@@ -4,47 +4,27 @@ import { Container, Hr, Label, Row, Subtitle, Title } from "@/src/styles-global"
 import InputIcon from "@/src/components/InputIcon";
 import LinkButton from "@/src/components/buttons/LinkButton";
 import { useNotification } from "@/src/context/NotificationContext";
-import { useAuthUserQuery } from "@/src/api/hooks/useUserQuery";
-import User from "@/src/types";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { StackNavigationProp } from "@react-navigation/stack";
+import { useAuthUserQuery } from "@/src/api/hooks/useUserQuery";
+import { SignInFormValuesDummy } from "@/src/types";
 
 const SignInSchema = z.object({
-    email: z.string().email("Invalid email address").nonempty("Email is required"),
+    username: z.string().min(1, "Username is required"),
     password: z.string().min(1, "Password is required"),
 });
 
-type SignInFormValues = z.infer<typeof SignInSchema>;
+type SignInFormValuesInfer = z.infer<typeof SignInSchema>;
 
 type SignInProps = {
     navigation: StackNavigationProp<any>;
 };
 
 const SignIn: React.FC<SignInProps> = ({ navigation }) => {
-    const [tooglePassword, setTooglePassword] = useState(false);
-    const [toogleRememberMe, setToogleRememberMe] = useState(false);
+    const [tooglePassword, setTooglePassword] = useState(true);
     const { showNotification } = useNotification();
-    const [loading, setLoading] = useState(false);
-
-    // const { mutate, isPending } = useAuthUserQuery({
-    //     onSuccess: data => {
-    //         console.log("User created successfully:", data);
-    //     },
-    //     onError: error => {
-    //         console.error("Error creating user:", error.message);
-    //     },
-    //     onSettled: () => {
-    //         console.log("Mutation is settled.");
-    //     },
-    // });
-
-    // const handleCreateUser = () => {
-    //     const user: User = { name: "Test", email: "test@gmail.com" };
-    //     mutate(user);
-    // };
-    const { isPending, error, data, isFetching, refetch } = useAuthUserQuery();
 
     const {
         control,
@@ -52,18 +32,23 @@ const SignIn: React.FC<SignInProps> = ({ navigation }) => {
         setError,
         clearErrors,
         formState: { errors },
-    } = useForm<SignInFormValues>({
+    } = useForm<SignInFormValuesInfer>({
         defaultValues: {
-            email: "",
+            username: "",
             password: "",
         },
         resolver: zodResolver(SignInSchema),
     });
 
-    const onSubmit = async auth => {
+    const { mutate, isPending, data, error } = useAuthUserQuery();
+
+    if (data) console.log("TokenData: ", data);
+    if (error) console.log("error: ", error);
+    if (error?.response?.data) showNotification(error?.response?.data);
+
+    const onSubmit = async (auth: SignInFormValuesDummy) => {
         try {
-            refetch();
-            setLoading(true);
+            mutate({ username: auth.username, password: auth.password });
             console.log("Auth: ", auth);
         } catch (error) {
             console.error("Validation error: ", error);
@@ -79,16 +64,16 @@ const SignIn: React.FC<SignInProps> = ({ navigation }) => {
 
             <Controller
                 control={control}
-                name="email"
+                name="username"
                 render={({ field: { onChange, onBlur, value } }) => (
                     <InputIcon
-                        placeholder="Email"
+                        placeholder="Username"
                         placeholderTextColor="#B0BEC5"
+                        autoCapitalize="none"
                         onChangeText={onChange}
                         onBlur={onBlur}
                         value={value}
-                        keyboardType="email-address"
-                        errors={errors.email ? errors.email.message : null}
+                        errors={errors.username ? errors.username.message : null}
                     />
                 )}
             />
@@ -101,6 +86,7 @@ const SignIn: React.FC<SignInProps> = ({ navigation }) => {
                         iconName={tooglePassword ? "eye" : "eye-slash"}
                         placeholder="Password"
                         placeholderTextColor="#B0BEC5"
+                        autoCapitalize="none"
                         onChangeText={onChange}
                         onBlur={onBlur}
                         onPressIcon={() => setTooglePassword(!tooglePassword)}
@@ -117,7 +103,7 @@ const SignIn: React.FC<SignInProps> = ({ navigation }) => {
                 label="Login"
                 onPress={handleSubmit(onSubmit)}
                 style={{ marginTop: 30 }}
-                loading={isFetching}
+                loading={isPending}
             />
 
             <Row gap="10px" marginVertical="40px">

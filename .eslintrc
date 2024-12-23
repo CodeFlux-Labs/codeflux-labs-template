@@ -1,14 +1,15 @@
 {
     "extends": [
-      "eslint:recommended",
-      "plugin:react/recommended",
-      "plugin:react-native/all",
-      "plugin:prettier/recommended"
+        "eslint:recommended",
+        "plugin:react/recommended",
+        "plugin:react-native/all",
+        "plugin:prettier/recommended",
+        "plugin:@tanstack/query/recommended",
     ],
     "plugins": ["prettier"],
     "rules": {
-      "prettier/prettier": ["warn"],
-      "react/react-in-jsx-scope": "off",
-      "react/prop-types": "off"
-    }
-  }
+        "prettier/prettier": ["warn"],
+        "react/react-in-jsx-scope": "off",
+        "react/prop-types": "off",
+    },
+}

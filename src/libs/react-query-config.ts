@@ -1,6 +1,9 @@
 import { QueryClient } from "@tanstack/react-query";
 import { mmkvStorage } from "./mmkv-config";
-import { persistQueryClient } from "@tanstack/react-query-persist-client";
+import {
+    persistQueryClient,
+    persistQueryClientRestore,
+} from "@tanstack/react-query-persist-client";
 import { createSyncStoragePersister } from "@tanstack/query-sync-storage-persister";
 
 const persistor = createSyncStoragePersister({
@@ -14,16 +17,27 @@ const persistor = createSyncStoragePersister({
 const queryClient = new QueryClient({
     defaultOptions: {
         queries: {
-            // Adjust query behavior as needed
             staleTime: 1000 * 60 * 5, // 5 minutes
+            cacheTime: Infinity,
         },
     },
 });
 
+(async () => {
+    try {
+        await persistQueryClientRestore({
+            queryClient,
+            persister: persistor,
+        });
+    } catch (error) {
+        console.warn("Failed to restore query client cache:", error);
+    }
+})();
+
 persistQueryClient({
     queryClient,
-    persistor,
-    maxAge: 0,
+    persister: persistor,
+    maxAge: Infinity,
 });
 
 export { queryClient };

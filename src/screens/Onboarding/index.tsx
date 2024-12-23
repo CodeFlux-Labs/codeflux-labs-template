@@ -14,7 +14,6 @@ const Onboarding: React.FC<OnboardingProps> = ({ navigation }) => {
 
     const onboardingCompleted = () => {
         setIsOnboardingCompleted(true);
-        navigation.navigate("SignIn");
     };
 
     return (

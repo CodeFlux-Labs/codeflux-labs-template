@@ -11,7 +11,6 @@ const NotificationContext = createContext<NotificationContextProps | undefined>(
 export const useNotification = () => {
     const context = useContext(NotificationContext);
     if (!context) {
-        // throw new Notification("useNotification must be used within a NotificationProvider");
         throw "useNotification must be used within a NotificationProvider";
     }
     return context;
@@ -21,12 +20,20 @@ export const NotificationProvider: React.FC = ({ children }) => {
     const [visible, setVisible] = useState(false);
     const [message, setMessage] = useState("");
 
-    const showNotification = (NotificationMessage: string) => {
-        setMessage(NotificationMessage);
+    const showNotification = (NotificationMessage: any) => {
+        if (typeof NotificationMessage === "string") {
+            setMessage(NotificationMessage);
+        } else {
+            setMessage(JSON.stringify(NotificationMessage));
+        }
+
         setVisible(true);
     };
 
-    const hideNotification = () => setVisible(false);
+    const hideNotification = () => {
+        setVisible(false);
+        setMessage("");
+    };
 
     return (
         <NotificationContext.Provider value={{ showNotification, hideNotification }}>

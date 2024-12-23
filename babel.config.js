@@ -12,7 +12,6 @@ module.exports = function (api) {
             ],
             "babel-plugin-styled-components",
             "react-native-reanimated/plugin",
-            "react-native-unistyles/plugin",
             [
                 "module-resolver",
                 {

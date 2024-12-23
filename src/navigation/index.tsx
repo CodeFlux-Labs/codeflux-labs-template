@@ -2,12 +2,21 @@ import React, { useState, useEffect } from "react";
 import { ActivityIndicator } from "react-native";
 import AuthNavigator from "./AuthNavigator";
 import AppNavigator from "./AppNavigator";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFonts } from "expo-font";
+import { useStore } from "../stores/useGlobalStore";
+import OnboardingNavigator from "./OnboardingNavigator";
+import { queryClient } from "../libs/react-query-config";
+import { useIsFetching, useQuery, MutationCache } from "@tanstack/react-query";
+import { useGetUserQuery } from "../api/hooks/useUserQuery";
 
 export default function RootNavigator() {
     const [isLoading, setIsLoading] = useState(true);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const { isOnboardingCompleted } = useStore();
+    const isFetchingAuthUser = useIsFetching({ queryKey: ["authUser"] });
+    const { data, isError, error } = useGetUserQuery();
+
+    if (error) console.log("ERROR_ROOT_NAVIGATION: ", error);
 
     let [fontsLoaded] = useFonts({
         "SFUIText-Bold": require("../assets/fonts/SFUIText-Bold.ttf"),
@@ -18,13 +27,12 @@ export default function RootNavigator() {
         "SFUIText-Semibold": require("../assets/fonts/SFUIText-Semibold.ttf"),
     });
 
-    // Simulate fetching the auth state
     useEffect(() => {
         const checkLoginState = async () => {
             try {
-                // Replace this logic with your actual auth logic
-                const token = await AsyncStorage.getItem("authToken");
-                setIsLoggedIn(!!token); // If token exists, user is logged in
+                console.log("USER_APP_NAVIGATION: ", data);
+
+                setIsLoggedIn(!!data);
             } catch (error) {
                 console.error("Failed to fetch auth state:", error);
             } finally {
@@ -33,7 +41,7 @@ export default function RootNavigator() {
         };
 
         checkLoginState();
-    }, []);
+    }, [data]);
 
     if (isLoading || !fontsLoaded) {
         return (
@@ -45,5 +53,11 @@ export default function RootNavigator() {
         );
     }
 
-    return isLoggedIn ? <AppNavigator /> : <AuthNavigator />;
+    return !isOnboardingCompleted ? (
+        <OnboardingNavigator />
+    ) : isLoggedIn ? (
+        <AppNavigator />
+    ) : (
+        <AuthNavigator />
+    );
 }

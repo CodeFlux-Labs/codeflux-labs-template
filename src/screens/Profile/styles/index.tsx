@@ -10,5 +10,5 @@ export const ProfilePicture = styled(Image)`
 `;
 
 export const SettingItem = styled(TouchableOpacity)`
-    margin: 20px 0 20px 0;
+    margin: 18px 0 18px 0;
 `;

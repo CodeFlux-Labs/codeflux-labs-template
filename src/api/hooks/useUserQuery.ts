@@ -1,40 +1,28 @@
-import { useQuery, useMutation, UseMutationOptions } from "@tanstack/react-query";
-import apiMobile from "../services/apiMobile";
+import { queryClient } from "@/src/libs/react-query-config";
+import User, { SignInFormValuesDummy } from "@/src/types";
+import { useQuery, useMutation } from "@tanstack/react-query";
+import axios from "axios";
 
 //= ==============================================================================================
-interface User {
-    name: string;
-    email: string;
-}
-
-//= ==============================================================================================
-const authUser = async () => {
-    // const { data } = await apiMobile.post("/api/getUser");
-    const { data } = await apiMobile.post("https://reqres.in/api/login");
+const authUser = async (user: SignInFormValuesDummy) => {
+    const { data } = await axios.post("https://dummyjson.com/auth/login", user);
     return data;
 };
 
 export const useAuthUserQuery = () =>
-    useQuery({
-        queryKey: ["user"],
-        queryFn: authUser,
-        enabled: false,
+    useMutation({
+        mutationKey: ["authUser"],
+        mutationFn: (user: SignInFormValuesDummy) => authUser(user),
+        onSuccess: data => queryClient.setQueryData(["authUser"], data),
     });
 
-//= ==============================================================================================
-const createUser = async (user: User): Promise<any> => {
-    const response = await apiMobile.post<any>("/api/createUser", user);
-
-    if (response.status !== 200) {
-        throw new Error("Error creating user");
-    }
-
-    return response.data;
-};
-
-export const useCreateUser = (options?: UseMutationOptions<string, Error, User>) => {
-    return useMutation<string, Error, User>({
-        mutationFn: createUser,
-        ...options,
+export const useGetUserQuery = () => {
+    return useQuery({
+        queryKey: ["authUser"],
+        queryFn: () => {
+            // Fetch the user data from the query client cache, if any
+            return queryClient.getQueryData<User>(["authUser"]);
+        },
+        enabled: false, // Disables automatic fetching since data is already available in the cache
     });
 };
