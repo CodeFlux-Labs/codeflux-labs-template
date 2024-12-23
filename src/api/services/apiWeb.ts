@@ -1,6 +1,5 @@
 import axios from "axios";
-import { env } from "@config/env";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { HOST_NAME, WEB_SERVER } from "@env";
 import { TOKEN } from "../utils/const";
 import { getUser } from "../../utils/index";
 import { store } from "../store";
@@ -8,7 +7,7 @@ import { resetDataToLogout, setLogoutMessage, setUser } from "../store/Actions/H
 
 //= ==========================================================================================
 const apiWeb = axios.create({
-    baseURL: `${env.PROTOCOL}://${env.HOST_NAME}:${env.PORT_SERVER}`,
+    baseURL: `$https://${HOST_NAME}:${WEB_SERVER}`,
     timeout: 25000,
 });
 
