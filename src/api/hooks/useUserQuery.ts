@@ -16,8 +16,8 @@ export const useAuthUserQuery = () =>
         onSuccess: data => queryClient.setQueryData(["authUser"], data),
     });
 
-export const useGetUserQuery = () => {
-    return useQuery({
+export const useGetUserQuery = () =>
+    useQuery({
         queryKey: ["authUser"],
         queryFn: () => {
             // Fetch the user data from the query client cache, if any
@@ -25,4 +25,6 @@ export const useGetUserQuery = () => {
         },
         enabled: false, // Disables automatic fetching since data is already available in the cache
     });
-};
+
+export const useRemoveUserQuery = () =>
+    queryClient.resetQueries({ queryKey: ["authUser"], exact: true }); // Removes the authUser data from the cache

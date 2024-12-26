@@ -7,6 +7,8 @@ import { colors } from "@/src/assets/colors";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Switch } from "react-native-switch";
 import { useGetUserQuery } from "@/src/api/hooks/useUserQuery";
+import { useOnHandleLogout, useSharedState } from "./logic";
+import EventMenuModal from "@/src/components/modals/EventMenuModal";
 
 type ProfileProps = {
     navigation: StackNavigationProp<any>;
@@ -19,12 +21,15 @@ interface SettingType {
 }
 
 const Profile: React.FC<ProfileProps> = ({ navigation }) => {
-    // const user = getAuth();
-    const [darkModeEnabled, setDarkModeEnable] = useState(false);
-    const [notificationEnabled, setNotificationEnabled] = useState(false);
-    // const { photoURL, displayName } = user.currentUser;
-    const displayName = "Test";
-    const { data, isError, error } = useGetUserQuery();
+    const {
+        darkModeEnabled,
+        setDarkModeEnable,
+        notificationEnabled,
+        setNotificationEnabled,
+        modalRef,
+    } = useSharedState();
+    const { data } = useGetUserQuery();
+    const onHandleLogout = useOnHandleLogout();
 
     const renderSwitch = (settter, currentValue) => {
         return (
@@ -69,7 +74,7 @@ const Profile: React.FC<ProfileProps> = ({ navigation }) => {
         {
             label: "Sign Out",
             actionComponent: () => <MaterialIcons name="arrow-right" size={18} color="#000" />,
-            onPress: () => null,
+            onPress: () => modalRef.current?.open(),
         },
         {
             label: null,
@@ -110,6 +115,13 @@ const Profile: React.FC<ProfileProps> = ({ navigation }) => {
             <Subtitle marginBottom="10px">Account Settings</Subtitle>
 
             {settings.map(settingItem => renderSettingItem(settingItem))}
+
+            <EventMenuModal
+                inputRef={modalRef}
+                message="Are you sure you want to sign out?"
+                buttonLabel="Yes, sign out"
+                onConfirm={onHandleLogout}
+            />
         </ContainerFlexStart>
     );
 };

@@ -1,22 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { ActivityIndicator } from "react-native";
 import AuthNavigator from "./AuthNavigator";
 import AppNavigator from "./AppNavigator";
 import { useFonts } from "expo-font";
 import { useStore } from "../stores/useGlobalStore";
 import OnboardingNavigator from "./OnboardingNavigator";
-import { queryClient } from "../libs/react-query-config";
-import { useIsFetching, useQuery, MutationCache } from "@tanstack/react-query";
 import { useGetUserQuery } from "../api/hooks/useUserQuery";
 
 export default function RootNavigator() {
-    const [isLoading, setIsLoading] = useState(true);
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
     const { isOnboardingCompleted } = useStore();
-    const isFetchingAuthUser = useIsFetching({ queryKey: ["authUser"] });
-    const { data, isError, error } = useGetUserQuery();
+    const { data, isError, error, isLoading } = useGetUserQuery();
 
     if (error) console.log("ERROR_ROOT_NAVIGATION: ", error);
+    console.log("isLoading: ", isLoading);
 
     let [fontsLoaded] = useFonts({
         "SFUIText-Bold": require("../assets/fonts/SFUIText-Bold.ttf"),
@@ -26,22 +22,6 @@ export default function RootNavigator() {
         "SFUIText-Regular": require("../assets/fonts/SFUIText-Regular.ttf"),
         "SFUIText-Semibold": require("../assets/fonts/SFUIText-Semibold.ttf"),
     });
-
-    useEffect(() => {
-        const checkLoginState = async () => {
-            try {
-                console.log("USER_APP_NAVIGATION: ", data);
-
-                setIsLoggedIn(!!data);
-            } catch (error) {
-                console.error("Failed to fetch auth state:", error);
-            } finally {
-                setIsLoading(false);
-            }
-        };
-
-        checkLoginState();
-    }, [data]);
 
     if (isLoading || !fontsLoaded) {
         return (
@@ -55,7 +35,7 @@ export default function RootNavigator() {
 
     return !isOnboardingCompleted ? (
         <OnboardingNavigator />
-    ) : isLoggedIn ? (
+    ) : data ? (
         <AppNavigator />
     ) : (
         <AuthNavigator />

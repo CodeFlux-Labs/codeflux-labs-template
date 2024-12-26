@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import DefaultButton from "@/src/components/buttons/DefaultButton";
 import { Container, Hr, Label, Row, Subtitle, Title } from "@/src/styles-global";
 import InputIcon from "@/src/components/InputIcon";
@@ -9,7 +9,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { useAuthUserQuery } from "@/src/api/hooks/useUserQuery";
-import { SignInFormValuesDummy } from "@/src/types";
+import { useOnHandleSubmit, useSharedState } from "./logic";
 
 const SignInSchema = z.object({
     username: z.string().min(1, "Username is required"),
@@ -23,14 +23,13 @@ type SignInProps = {
 };
 
 const SignIn: React.FC<SignInProps> = ({ navigation }) => {
-    const [tooglePassword, setTooglePassword] = useState(true);
+    const { tooglePassword, setTooglePassword } = useSharedState();
     const { showNotification } = useNotification();
+    const onHandleSubmit = useOnHandleSubmit();
 
     const {
         control,
         handleSubmit,
-        setError,
-        clearErrors,
         formState: { errors },
     } = useForm<SignInFormValuesInfer>({
         defaultValues: {
@@ -43,17 +42,7 @@ const SignIn: React.FC<SignInProps> = ({ navigation }) => {
     const { mutate, isPending, data, error } = useAuthUserQuery();
 
     if (data) console.log("TokenData: ", data);
-    if (error) console.log("error: ", error);
     if (error?.response?.data) showNotification(error?.response?.data);
-
-    const onSubmit = async (auth: SignInFormValuesDummy) => {
-        try {
-            mutate({ username: auth.username, password: auth.password });
-            console.log("Auth: ", auth);
-        } catch (error) {
-            console.error("Validation error: ", error);
-        }
-    };
 
     return (
         <Container>
@@ -101,7 +90,7 @@ const SignIn: React.FC<SignInProps> = ({ navigation }) => {
 
             <DefaultButton
                 label="Login"
-                onPress={handleSubmit(onSubmit)}
+                onPress={handleSubmit(auth => onHandleSubmit(auth, mutate))}
                 style={{ marginTop: 30 }}
                 loading={isPending}
             />
