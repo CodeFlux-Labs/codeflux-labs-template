@@ -27,3 +27,9 @@ export interface Pagination {
 export type ScreenDefaultProps = {
     navigation: StackNavigationProp<any>;
 };
+
+export type QuoteProps = {
+    id: number;
+    author: string;
+    quote: string;
+};

@@ -10,7 +10,7 @@ export default function AppNavigator() {
     return (
         <Tab.Navigator
             screenOptions={{
-                tabBarActiveTintColor: "purple",
+                tabBarActiveTintColor: "#0000ff",
             }}>
             <Tab.Screen
                 name="Home"

@@ -78,6 +78,17 @@ export const Container = styled(View)`
     padding: 20px 15px;
 `;
 
+export const ContainerCenter = styled(View)`
+    justify-content: center;
+    align-items: center;
+    padding: 40px 15px 0px;
+`;
+
+export const ContainerPadding = styled(View)`
+    flex: 1;
+    padding: 20px 15px;
+`;
+
 export const ContainerFlexStart = styled(View)`
     flex: 1;
     background-color: #f0f0f0;
@@ -135,4 +146,20 @@ export const Label = styled(Text)`
     font-family: "SFUIText-Regular";
     font-size: 12px;
     color: ${colors.blueGray};
+`;
+
+export const QuoteContainer = styled(View)<DefaultProps>`
+    height: 80px;
+    background-color: ${colors.blueGray};
+    border-radius: 10px;
+    padding: 8px;
+    margin-bottom: 20px;
+    gap: 6px;
+    justify-content: center;
+`;
+
+export const QuoteText = styled(Text)`
+    font-family: "SFUIText-Regular";
+    font-size: 12px;
+    color: ${colors.primary};
 `;
