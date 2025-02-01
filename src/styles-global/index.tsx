@@ -86,7 +86,7 @@ export const ContainerCenter = styled(View)`
 
 export const ContainerPadding = styled(View)`
     flex: 1;
-    padding: 20px 15px;
+    padding: 20px 15px 0px;
 `;
 
 export const ContainerFlexStart = styled(View)`

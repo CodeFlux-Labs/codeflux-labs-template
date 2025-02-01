@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Button, Text } from "react-native";
+import React, { useEffect, useState } from "react";
+import { Button, Text, View, useWindowDimensions } from "react-native";
 import {
     ContainerCenter,
     ContainerPadding,
@@ -12,17 +12,41 @@ import { QuoteProps, ScreenDefaultProps } from "@/src/types";
 import { useGetQuotesInfinityScroll, useGetQuotesPaginated } from "@/src/api/hooks/useQuotesQuery";
 import { ActivityIndicator } from "react-native-paper";
 import { FlashList } from "@shopify/flash-list";
-import { View, useWindowDimensions } from "react-native";
 import { TabView, SceneMap } from "react-native-tab-view";
+import { CopilotStep, walkthroughable, useCopilot } from "react-native-copilot";
+import { useTutorialStore } from "@/src/stores/useTutorialStore";
 
 const routes = [
     { key: "first", title: "Infinity Scroll" },
     { key: "second", title: "Pagination" },
 ];
 
+const WalkthroughableTitle = walkthroughable(Title);
+const WalkthroughableSubtitle = walkthroughable(Subtitle);
+const WalkthroughableView = walkthroughable(View);
+
 const Home: React.FC<ScreenDefaultProps> = ({ navigation }) => {
     const layout = useWindowDimensions();
     const [index, setIndex] = React.useState(0);
+    const { start, copilotEvents } = useCopilot();
+    const { setHomeTutorialCompleted, homeTutorialCompleted } = useTutorialStore();
+
+    useEffect(() => {
+        if (!homeTutorialCompleted) start();
+    }, []);
+
+    useEffect(() => {
+        copilotEvents.on("stepChange", step => {
+            console.log(`stepChange: ${step?.name}`);
+        });
+        copilotEvents.on("start", () => {
+            console.log(`start`);
+        });
+        copilotEvents.on("stop", () => {
+            console.log(`stop`);
+            setHomeTutorialCompleted(true);
+        });
+    }, [copilotEvents]);
 
     const renderQuotes = (text: string, author: string) => {
         return (
@@ -78,7 +102,9 @@ const Home: React.FC<ScreenDefaultProps> = ({ navigation }) => {
                         estimatedItemSize={90}
                         data={quotes}
                         keyExtractor={(item: QuoteProps) => item.id.toString()}
-                        renderItem={({ item }) => renderQuotes(item.quote, item.author)}
+                        renderItem={({ item, index }) =>
+                            renderQuotes(item.quote, item.author, index)
+                        }
                         ListEmptyComponent={() =>
                             isLoading ? <Text>Loading...</Text> : <Text>No data</Text>
                         }
@@ -112,17 +138,30 @@ const Home: React.FC<ScreenDefaultProps> = ({ navigation }) => {
     return (
         <>
             <ContainerCenter>
-                <Title centered>Welcome to the Evolog Expo Template</Title>
-                <Subtitle>Home</Subtitle>
+                <CopilotStep name="title" text="This is a title" order={1}>
+                    <WalkthroughableTitle centered>
+                        Welcome to the Evolog Expo Template
+                    </WalkthroughableTitle>
+                </CopilotStep>
+                <CopilotStep name="subtitle" text="This is a subtitle" order={2}>
+                    <WalkthroughableSubtitle>Home</WalkthroughableSubtitle>
+                </CopilotStep>
             </ContainerCenter>
 
-            <TabView
-                navigationState={{ index, routes }}
-                renderScene={renderScene}
-                onIndexChange={setIndex}
-                initialLayout={{ width: layout.width }}
-                pagerStyle={{ paddingTop: 20 }}
-            />
+            <CopilotStep
+                name="tabview"
+                text="This is a tabview using react-native-tab-view"
+                order={3}>
+                <WalkthroughableView style={{ flex: 1 }}>
+                    <TabView
+                        navigationState={{ index, routes }}
+                        renderScene={renderScene}
+                        onIndexChange={setIndex}
+                        initialLayout={{ width: layout.width }}
+                        pagerStyle={{ paddingTop: 20 }}
+                    />
+                </WalkthroughableView>
+            </CopilotStep>
         </>
     );
 };
