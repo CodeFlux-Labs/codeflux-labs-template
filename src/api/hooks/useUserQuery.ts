@@ -1,21 +1,26 @@
 import { queryClient } from "@/src/libs/react-query-config";
 import User, { SignInFormValuesDummy } from "@/src/types";
 import { useQuery, useMutation } from "@tanstack/react-query";
-import axios from "axios";
+import { apiDummy } from "../services/apiDummy";
 
 //= ==============================================================================================
 const authUser = async (user: SignInFormValuesDummy) => {
-    const { data } = await axios.post("https://dummyjson.com/auth/login", user);
+    const { data } = await apiDummy.post("/auth/login", user);
     return data;
 };
 
+//= ==============================================================================================
 export const useAuthUserQuery = () =>
     useMutation({
         mutationKey: ["authUser"],
         mutationFn: (user: SignInFormValuesDummy) => authUser(user),
-        onSuccess: data => queryClient.setQueryData(["authUser"], data),
+        onSuccess: data => {
+            queryClient.setQueryData(["authUser"], data);
+            return data;
+        },
     });
 
+//= ==============================================================================================
 export const useGetUserQuery = () =>
     useQuery({
         queryKey: ["authUser"],
@@ -26,5 +31,7 @@ export const useGetUserQuery = () =>
         enabled: false, // Disables automatic fetching since data is already available in the cache
     });
 
+//= ==============================================================================================
+// Removes the authUser data from the cache
 export const useRemoveUserQuery = () =>
-    queryClient.resetQueries({ queryKey: ["authUser"], exact: true }); // Removes the authUser data from the cache
+    queryClient.resetQueries({ queryKey: ["authUser"], exact: true });

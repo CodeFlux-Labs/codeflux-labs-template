@@ -9,7 +9,7 @@ interface AppState {
     setIsOnboardingCompleted: (isOnboardingCompleted: boolean) => void;
 }
 
-export const useStore = create<AppState>()(
+export const useGlobalStore = create<AppState>()(
     persist(
         set => ({
             theme: "light",

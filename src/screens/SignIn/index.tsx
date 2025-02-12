@@ -1,15 +1,17 @@
-import React from "react";
+import React, { useEffect } from "react";
 import DefaultButton from "@/src/components/buttons/DefaultButton";
 import { Container, Hr, Label, Row, Subtitle, Title } from "@/src/styles-global";
 import InputIcon from "@/src/components/InputIcon";
 import LinkButton from "@/src/components/buttons/LinkButton";
-import { useNotification } from "@/src/context/NotificationContext";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { useAuthUserQuery } from "@/src/api/hooks/useUserQuery";
 import { useOnHandleSubmit, useSharedState } from "./logic";
+import FingerprintButton from "@/src/components/buttons/FingerprintButton";
+import { useBiometricLogin } from "@hooks/index";
+import { useUserStore } from "@/src/stores/useUserStore";
 
 const SignInSchema = z.object({
     username: z.string().min(1, "Username is required"),
@@ -24,13 +26,14 @@ type SignInProps = {
 
 const SignIn: React.FC<SignInProps> = ({ navigation }) => {
     const { tooglePassword, setTooglePassword } = useSharedState();
-    const { showNotification } = useNotification();
     const onHandleSubmit = useOnHandleSubmit();
+    const { email } = useUserStore();
 
     const {
         control,
         handleSubmit,
         formState: { errors },
+        setValue,
     } = useForm<SignInFormValuesInfer>({
         defaultValues: {
             username: "",
@@ -39,10 +42,17 @@ const SignIn: React.FC<SignInProps> = ({ navigation }) => {
         resolver: zodResolver(SignInSchema),
     });
 
-    const { mutate, isPending, data, error } = useAuthUserQuery();
+    const { mutate, isPending } = useAuthUserQuery();
 
-    if (data) console.log("TokenData: ", data);
-    if (error?.response?.data) showNotification(error?.response?.data);
+    async function handleBiometricLogin() {
+        const biometricLogin = await useBiometricLogin();
+
+        console.log("biometricLogin: ", biometricLogin, email);
+    }
+
+    useEffect(() => {
+        if (email) setValue("username", email);
+    }, []);
 
     return (
         <Container>
@@ -94,6 +104,8 @@ const SignIn: React.FC<SignInProps> = ({ navigation }) => {
                 style={{ marginTop: 30 }}
                 loading={isPending}
             />
+
+            <FingerprintButton style={{ marginTop: 30 }} onPress={() => handleBiometricLogin()} />
 
             <Row gap="10px" marginVertical="40px">
                 <Hr />

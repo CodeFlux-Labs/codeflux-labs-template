@@ -1,4 +1,5 @@
 import React from "react";
+import "react-native-reanimated";
 import { NavigationContainer } from "@react-navigation/native";
 import { CopilotProvider } from "react-native-copilot";
 import { GestureHandlerRootView } from "react-native-gesture-handler";

@@ -3,12 +3,12 @@ import { ActivityIndicator } from "react-native";
 import AuthNavigator from "./AuthNavigator";
 import AppNavigator from "./AppNavigator";
 import { useFonts } from "expo-font";
-import { useStore } from "../stores/useGlobalStore";
+import { useGlobalStore } from "../stores/useGlobalStore";
 import OnboardingNavigator from "./OnboardingNavigator";
 import { useGetUserQuery } from "../api/hooks/useUserQuery";
 
 export default function RootNavigator() {
-    const { isOnboardingCompleted } = useStore();
+    const { isOnboardingCompleted } = useGlobalStore();
     const { data, isError, error, isLoading } = useGetUserQuery();
 
     if (error) console.log("ERROR_ROOT_NAVIGATION: ", error);

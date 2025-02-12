@@ -15,6 +15,8 @@ import { FlashList } from "@shopify/flash-list";
 import { TabView, SceneMap } from "react-native-tab-view";
 import { CopilotStep, walkthroughable, useCopilot } from "react-native-copilot";
 import { useTutorialStore } from "@/src/stores/useTutorialStore";
+import DefaultSkeleton from "@/src/components/skeleton/DefaultSkeleton";
+import SkeletonList from "@/src/components/skeleton/SkeletonList";
 
 const routes = [
     { key: "first", title: "Infinity Scroll" },
@@ -58,30 +60,39 @@ const Home: React.FC<ScreenDefaultProps> = ({ navigation }) => {
     };
 
     const renderInfinityScrolling = () => {
-        const { data, fetchNextPage, hasNextPage, isFetchingNextPage, refetch, isRefetching } =
-            useGetQuotesInfinityScroll();
+        const {
+            data,
+            fetchNextPage,
+            hasNextPage,
+            isFetchingNextPage,
+            refetch,
+            isRefetching,
+            isLoading,
+        } = useGetQuotesInfinityScroll();
 
         const quotes = data?.pages.flatMap(page => page.quotes) || [];
 
-        return (
-            <>
-                <ContainerPadding>
-                    <FlashList
-                        estimatedItemSize={90}
-                        data={quotes}
-                        keyExtractor={(item: QuoteProps) => item.id.toString()}
-                        renderItem={({ item }) => renderQuotes(item.quote, item.author)}
-                        onEndReached={() => {
-                            if (hasNextPage && !isFetchingNextPage) fetchNextPage();
-                        }}
-                        onEndReachedThreshold={0.5}
-                        ListFooterComponent={isFetchingNextPage ? <ActivityIndicator /> : null}
-                        onRefresh={() => refetch()}
-                        refreshing={isRefetching}
-                    />
-                </ContainerPadding>
-            </>
-        );
+        if (isLoading || isRefetching) return <SkeletonList count={4} />;
+        else
+            return (
+                <>
+                    <ContainerPadding>
+                        <FlashList
+                            estimatedItemSize={90}
+                            data={quotes}
+                            keyExtractor={(item: QuoteProps) => item.id.toString()}
+                            renderItem={({ item }) => renderQuotes(item.quote, item.author)}
+                            onEndReached={() => {
+                                if (hasNextPage && !isFetchingNextPage) fetchNextPage();
+                            }}
+                            onEndReachedThreshold={0.5}
+                            ListFooterComponent={isFetchingNextPage ? <ActivityIndicator /> : null}
+                            onRefresh={() => refetch()}
+                            refreshing={isRefetching}
+                        />
+                    </ContainerPadding>
+                </>
+            );
     };
 
     const renderPagination = () => {
@@ -95,39 +106,41 @@ const Home: React.FC<ScreenDefaultProps> = ({ navigation }) => {
 
         const quotes = data?.quotes ?? [];
 
-        return (
-            <>
-                <ContainerPadding>
-                    <FlashList
-                        estimatedItemSize={90}
-                        data={quotes}
-                        keyExtractor={(item: QuoteProps) => item.id.toString()}
-                        renderItem={({ item, index }) =>
-                            renderQuotes(item.quote, item.author, index)
-                        }
-                        ListEmptyComponent={() =>
-                            isLoading ? <Text>Loading...</Text> : <Text>No data</Text>
-                        }
-                        onRefresh={() => refetch()}
-                        refreshing={isRefetching}
-                    />
+        if (isLoading || isRefetching) return <SkeletonList count={4} />;
+        else
+            return (
+                <>
+                    <ContainerPadding>
+                        <FlashList
+                            estimatedItemSize={90}
+                            data={quotes}
+                            keyExtractor={(item: QuoteProps) => item.id.toString()}
+                            renderItem={({ item, index }) =>
+                                renderQuotes(item.quote, item.author, index)
+                            }
+                            ListEmptyComponent={() =>
+                                isLoading ? <Text>Loading...</Text> : <Text>No data</Text>
+                            }
+                            onRefresh={() => refetch()}
+                            refreshing={isRefetching}
+                        />
 
-                    <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-                        <Button
-                            title="Previous"
-                            onPress={() => setPage(prev => Math.max(prev - 1, 1))}
-                            disabled={page === 1}
-                        />
-                        <Text>Page {page}</Text>
-                        <Button
-                            title="Next"
-                            onPress={() => setPage(prev => prev + 1)}
-                            disabled={data?.total <= skip + limit}
-                        />
-                    </View>
-                </ContainerPadding>
-            </>
-        );
+                        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+                            <Button
+                                title="Previous"
+                                onPress={() => setPage(prev => Math.max(prev - 1, 1))}
+                                disabled={page === 1}
+                            />
+                            <Text>Page {page}</Text>
+                            <Button
+                                title="Next"
+                                onPress={() => setPage(prev => prev + 1)}
+                                disabled={data?.total <= skip + limit}
+                            />
+                        </View>
+                    </ContainerPadding>
+                </>
+            );
     };
 
     const renderScene = SceneMap({

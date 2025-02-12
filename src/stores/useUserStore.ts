@@ -9,7 +9,7 @@ interface UserState {
     setToken: (token: string) => void;
 }
 
-export const useStore = create<UserState>()(
+export const useUserStore = create<UserState>()(
     persist(
         set => ({
             email: null,
