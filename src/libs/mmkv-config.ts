@@ -5,6 +5,7 @@ export const mmkvStorage = new MMKV({
     encryptionKey: "my-encryption-key", // (Opcional) chave de criptografia
 });
 
+//= ==============================================================================================
 export const mmkvStorageAdapter = {
     getItem: <T>(key: string): T | null => {
         try {

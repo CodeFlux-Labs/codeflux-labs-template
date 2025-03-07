@@ -6,6 +6,7 @@ import {
 } from "@tanstack/react-query-persist-client";
 import { createSyncStoragePersister } from "@tanstack/query-sync-storage-persister";
 
+//= ==============================================================================================
 const persistor = createSyncStoragePersister({
     storage: {
         setItem: (key, value) => mmkvStorage.set(key, value),
@@ -14,15 +15,17 @@ const persistor = createSyncStoragePersister({
     },
 });
 
+//= ==============================================================================================
 const queryClient = new QueryClient({
     defaultOptions: {
         queries: {
             staleTime: 1000 * 60 * 5, // 5 minutes
-            cacheTime: Infinity,
+            gcTime: Infinity,
         },
     },
 });
 
+//= ==============================================================================================
 (async () => {
     try {
         await persistQueryClientRestore({
@@ -34,6 +37,7 @@ const queryClient = new QueryClient({
     }
 })();
 
+//= ==============================================================================================
 persistQueryClient({
     queryClient,
     persister: persistor,

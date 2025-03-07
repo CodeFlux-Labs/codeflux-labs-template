@@ -1,10 +1,33 @@
 import { useNotification } from "@/src/context/NotificationContext";
 import { useUserStore } from "@/src/stores/useUserStore";
 import { SignInFormValuesDummy } from "@/src/types";
+import { StackNavigationProp } from "@react-navigation/stack";
 import { UseMutateFunction } from "@tanstack/react-query";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
+import { UseFormSetValue } from "react-hook-form";
 import { useBetween } from "use-between";
+import { z } from "zod";
 
+//= ==============================================================================================
+// 🔹 Schema Validation
+export const SignInSchema = z.object({
+    username: z.string().min(1, "Username is required"),
+    password: z.string().min(1, "Password is required"),
+});
+
+export type SignInFormValues = z.infer<typeof SignInSchema>;
+
+export type SignInProps = {
+    navigation: StackNavigationProp<any>;
+};
+
+// 🔹 Extract default form values
+export const defaultValues: SignInFormValues = {
+    username: "",
+    password: "",
+};
+
+//= ==============================================================================================
 // ----------- Sharabled State -----------
 const useLogicStates = () => {
     const [tooglePassword, setTooglePassword] = useState(false);
@@ -49,4 +72,13 @@ export const useOnHandleSubmit = () => {
         },
         [],
     );
+};
+
+//= ==============================================================================================
+export const usePrefillEmailIfExists = (setValue: UseFormSetValue<SignInFormValues>) => {
+    const { email } = useUserStore();
+
+    useEffect(() => {
+        if (email) setValue("username", email);
+    }, [email, setValue]);
 };

@@ -1,26 +1,17 @@
-import React, { useState } from "react";
+import React from "react";
 import { ContainerFlexStart, DefaultText, Hr, Row, Subtitle, Title } from "@/src/styles-global";
-import { StackNavigationProp } from "@react-navigation/stack";
 import { ProfilePicture, SettingItem } from "./styles";
 import ProfilePhoto from "@/src/assets/images/profile-photo.png";
 import { colors } from "@/src/assets/colors";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Switch } from "react-native-switch";
 import { useGetUserQuery } from "@/src/api/hooks/useUserQuery";
-import { useOnHandleLogout, useSharedState } from "./logic";
+import { useOnHandleLogout, useSharedState } from "./controller";
 import EventMenuModal from "@/src/components/modals/EventMenuModal";
+import { ScreenDefaultProps } from "@/src/types";
 
-type ProfileProps = {
-    navigation: StackNavigationProp<any>;
-};
-
-interface SettingType {
-    label: string;
-    actionComponent: React.FC;
-    onPress: () => void;
-}
-
-const Profile: React.FC<ProfileProps> = ({ navigation }) => {
+//= ==============================================================================================
+const Profile: React.FC<ScreenDefaultProps> = ({ navigation }) => {
     const {
         darkModeEnabled,
         setDarkModeEnable,
@@ -50,6 +41,7 @@ const Profile: React.FC<ProfileProps> = ({ navigation }) => {
         );
     };
 
+    //= ==============================================================================================
     const settings = [
         {
             label: "Edit Profile",
@@ -93,6 +85,7 @@ const Profile: React.FC<ProfileProps> = ({ navigation }) => {
         },
     ];
 
+    //= ==============================================================================================
     const renderSettingItem = (item: SettingType) => {
         return (
             <SettingItem onPress={item.onPress} key={item.label} disabled={!item.label}>
@@ -104,6 +97,7 @@ const Profile: React.FC<ProfileProps> = ({ navigation }) => {
         );
     };
 
+    //= ==============================================================================================
     return (
         <ContainerFlexStart>
             <Row gap="15px">

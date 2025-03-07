@@ -1,6 +1,6 @@
 import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import Onboarding from "../screens/Onboarding";
+import Onboarding from "../screens/Onboarding/view";
 
 const Stack = createNativeStackNavigator();
 

@@ -1,100 +1,75 @@
-import React, { useEffect } from "react";
+import React from "react";
 import DefaultButton from "@/src/components/buttons/DefaultButton";
 import { Container, Hr, Label, Row, Subtitle, Title } from "@/src/styles-global";
 import InputIcon from "@/src/components/InputIcon";
 import LinkButton from "@/src/components/buttons/LinkButton";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import { StackNavigationProp } from "@react-navigation/stack";
 import { useAuthUserQuery } from "@/src/api/hooks/useUserQuery";
-import { useOnHandleSubmit, useSharedState } from "./logic";
+import {
+    defaultValues,
+    SignInFormValues,
+    SignInProps,
+    SignInSchema,
+    useOnHandleSubmit,
+    usePrefillEmailIfExists,
+    useSharedState,
+} from "./logic";
 import FingerprintButton from "@/src/components/buttons/FingerprintButton";
-import { useBiometricLogin } from "@hooks/index";
-import { useUserStore } from "@/src/stores/useUserStore";
+import { useBiometricLogin } from "@/src/hooks/biometric/useBiometric";
 
-const SignInSchema = z.object({
-    username: z.string().min(1, "Username is required"),
-    password: z.string().min(1, "Password is required"),
-});
-
-type SignInFormValuesInfer = z.infer<typeof SignInSchema>;
-
-type SignInProps = {
-    navigation: StackNavigationProp<any>;
-};
-
-const SignIn: React.FC<SignInProps> = ({ navigation }) => {
+//= ==============================================================================================
+const SignIn: React.FC<SignInProps> = () => {
     const { tooglePassword, setTooglePassword } = useSharedState();
     const onHandleSubmit = useOnHandleSubmit();
-    const { email } = useUserStore();
+    const { isAuthenticated, authenticate } = useBiometricLogin();
+    const { mutate, isPending } = useAuthUserQuery();
 
+    // 🔹 Form Hook
     const {
         control,
         handleSubmit,
         formState: { errors },
         setValue,
-    } = useForm<SignInFormValuesInfer>({
-        defaultValues: {
-            username: "",
-            password: "",
-        },
+    } = useForm<SignInFormValues>({
+        defaultValues,
         resolver: zodResolver(SignInSchema),
     });
 
-    const { mutate, isPending } = useAuthUserQuery();
+    // 🔹 Prefill username if email exists
+    usePrefillEmailIfExists(setValue);
 
-    async function handleBiometricLogin() {
-        const biometricLogin = await useBiometricLogin();
-
-        console.log("biometricLogin: ", biometricLogin, email);
-    }
-
-    useEffect(() => {
-        if (email) setValue("username", email);
-    }, []);
+    // 🔹 Input Field Renderer
+    const renderInput = (name: keyof SignInFormValues, placeholder: string, secure = false) => (
+        <Controller
+            control={control}
+            name={name}
+            render={({ field: { onChange, onBlur, value } }) => (
+                <InputIcon
+                    placeholder={placeholder}
+                    placeholderTextColor="#B0BEC5"
+                    autoCapitalize="none"
+                    onChangeText={onChange}
+                    onBlur={onBlur}
+                    value={value}
+                    secureTextEntry={secure && tooglePassword}
+                    iconName={secure ? (tooglePassword ? "eye" : "eye-slash") : undefined}
+                    onPressIcon={secure ? () => setTooglePassword(!tooglePassword) : undefined}
+                    errors={errors[name]?.message || null}
+                />
+            )}
+        />
+    );
 
     return (
         <Container>
             <Title>Welcome Back, Evolog Expo Template!</Title>
             <Subtitle>
-                We are excited to have your back. Log in now and access your account.
+                We are excited to have you back. Log in now and access your account.
             </Subtitle>
 
-            <Controller
-                control={control}
-                name="username"
-                render={({ field: { onChange, onBlur, value } }) => (
-                    <InputIcon
-                        placeholder="Username"
-                        placeholderTextColor="#B0BEC5"
-                        autoCapitalize="none"
-                        onChangeText={onChange}
-                        onBlur={onBlur}
-                        value={value}
-                        errors={errors.username ? errors.username.message : null}
-                    />
-                )}
-            />
-
-            <Controller
-                control={control}
-                name="password"
-                render={({ field: { onChange, onBlur, value } }) => (
-                    <InputIcon
-                        iconName={tooglePassword ? "eye" : "eye-slash"}
-                        placeholder="Password"
-                        placeholderTextColor="#B0BEC5"
-                        autoCapitalize="none"
-                        onChangeText={onChange}
-                        onBlur={onBlur}
-                        onPressIcon={() => setTooglePassword(!tooglePassword)}
-                        value={value}
-                        secureTextEntry={tooglePassword}
-                        errors={errors.password ? errors.password.message : null}
-                    />
-                )}
-            />
+            {renderInput("username", "Username")}
+            {renderInput("password", "Password", true)}
 
             <LinkButton label="Forgot your password?" onPress={() => null} />
 
@@ -105,7 +80,7 @@ const SignIn: React.FC<SignInProps> = ({ navigation }) => {
                 loading={isPending}
             />
 
-            <FingerprintButton style={{ marginTop: 30 }} onPress={() => handleBiometricLogin()} />
+            <FingerprintButton style={{ marginTop: 30 }} onPress={authenticate} />
 
             <Row gap="10px" marginVertical="40px">
                 <Hr />

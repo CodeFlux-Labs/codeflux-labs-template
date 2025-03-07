@@ -4307,6 +4307,11 @@ event-target-shim@^5.0.0, event-target-shim@^5.0.1:
   resolved "https://registry.yarnpkg.com/event-target-shim/-/event-target-shim-5.0.1.tgz#5d4d3ebdf9583d63a5333ce2deb7480ab2b05789"
   integrity sha512-i/2XbnSz/uxRCU6+NdVJgKWDTM427+MqYbkQzD321DuCQJUqOuJKIA0IM2+W2xtYHdKOmZ4dR6fExsd4SXL+WQ==
 
+evolog-core@^1.0.9:
+  version "1.0.9"
+  resolved "http://82.25.75.210:4873/evolog-core/-/evolog-core-1.0.9.tgz#ac9994660e4d94b71ba1fcbff606a39a5097f973"
+  integrity sha512-/3cmeFFYBkJ+25lI+mTutyAy9JCvr8JtBJH5AuFq5190yvBzZol1qlysqXsZfer7UmIxH+RRzIvlBNa0wQcFlA==
+
 exec-async@^2.2.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/exec-async/-/exec-async-2.2.0.tgz#c7c5ad2eef3478d38390c6dd3acfe8af0efc8301"
